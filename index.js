@@ -10,9 +10,18 @@ client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands')
                        .filter(file => file.endswith('.js'));
 
+const clientConfig = {
+    configChannel: 'random-1-on-1-config',
+    historyChannel: 'random-1-on-1-history',
+    commandConfigs: {}
+}
+
 for (const commandFile in commandFiles) {
     const command = require(`./commands/${commandFile}`);
     client.commands.set(command.data.name, command);
+    if (command.config) {
+        clientConfig.commandConfigs.set(command.data.name, command.config);
+    }
 }
 
 
@@ -28,7 +37,7 @@ client.on('interactionCreate', async interaction => {
         }
 
         try {
-            await command.action.execute(interaction, client);
+            await command.action.execute(interaction, client, clientConfig);
         } catch (error) {
             console.error(error);
             return interaction.reply({
