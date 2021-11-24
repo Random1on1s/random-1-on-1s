@@ -2,17 +2,17 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 // This will allow you to set the role that the random 1-on-1 bot will use to 
 // choose people for pairings
-const configPrefix = "ROLE"
-const commandConfig = {
-    prefix: configPrefix,
-    configMessage: role => `${configPrefix}: ${role}`,
+const setRoleCommandPrefix = "ROLE";
+const setRoleCommandConfig = {
+    prefix: setRoleCommandPrefix,
+    configMessage: role => `${setRoleCommandPrefix}: ${role}`,
     configParser: msg => {
-        if (msg.startsWith(configPrefix)) {
-            const role = msg.split(": ")[1];
-            return role;
-        } else {
-            return;
+        if (msg.startsWith(setRoleCommandPrefix)) {
+            const role = msg.match(`${setRoleCommandPrefix}: (.*)`) || undefined;
+            if (role) return role;
+            return undefined;
         }
+        return undefined;
     }
 }
 
@@ -35,5 +35,5 @@ module.exports = {
             return interaction.reply(`No role was provided in ${interaction}`);
         }
     },
-    config: commandConfig
+    config: setRoleCommandConfig
 }
