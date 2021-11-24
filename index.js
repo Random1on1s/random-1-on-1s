@@ -1,24 +1,46 @@
 const dotenv = require('dotenv');
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, InteractionCollector } = require('discord.js');
+const { default: Collection } = require('@discordjs/collection');
 
 dotenv.config();
 
 const client = new Client();
+
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands')
+                       .filter(file => file.endswith('.js'));
+
+for (const commandFile in commandFiles) {
+    const command = require(`./commands/${commandFile}`);
+    client.commands.set(command.data.name, command);
+}
+
 
 client.once('ready', () => {
     console.log(`Logging in as ${client.user.tag}`);
 });
 
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
+    if (interaction.isCommand()) {
+        const command = client.commands.get(interaction.commandName);
+        if (!command) {
+            return interaction.reply(`Command ${interaction.commandName} is not a valid command`);
+        }
 
-    const { commandName } = interaction;
-
-    if ( commandName === 'SetSchedule' ) {
-        
+        try {
+            await command.action.execute(interaction, client);
+        } catch (error) {
+            console.error(error);
+            return interaction.reply({
+               content: `Command ${interaction.commandName} failed due to error ${error}`,
+               ephemeral: true 
+            });
+        }
+    }  
+    else {
+        return;
     }
-
 })
 
 
-client.login(process.env.CLIENT_TOKEN)
+client.login(process.env.CLIENT_TOKEN);
