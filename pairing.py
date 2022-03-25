@@ -1,22 +1,25 @@
 import argparse
 
-from scipy.special import softmax
 import numpy as np
 
 random = np.random.default_rng()
+
+def softmax(v):
+    v -= v.min()
+    return np.exp(v)/np.exp(v).sum()
 
 class Participant:
 
     def __init__(self, num_people):
         self.meetings_counter = np.zeros(num_people)
 
-    def increment_hits(self, *other_participants):
+    def increment_meetings_count(self, *other_participants):
         for other in other_participants:
             self.meetings_counter[other] += 1
     
     def sample_match(self, indices, gamma):
-        feas = gamma*self.meetings_counter[indices]
-        probabilities = softmax(feas)
+        meeting_counts = gamma*self.meetings_counter[indices]
+        probabilities = softmax(meeting_counts)
         match = random.choice(indices, p=probabilities)
         return match
 
@@ -34,7 +37,6 @@ def generate_pairs(participants, gamma):
         pairs[0].append(unmatched[0])
     return pairs
 
-# sampling first person based on stuff
 def main(num_people, num_iters, gamma):
     gamma = np.log(gamma)
     participants = [Participant(num_people) for _ in range(num_people)]
@@ -42,7 +44,7 @@ def main(num_people, num_iters, gamma):
         pairs = generate_pairs(participants, gamma)
         for match in pairs:
             for index in match:
-                participants[index].increment_hits(*filter(lambda i : i != index, match))
+                participants[index].increment_meetings_count(*filter(lambda i : i != index, match))
     for participant_no,participant in enumerate(participants):
         print("participant {}:".format(participant_no), participant.meetings_counter)
 
