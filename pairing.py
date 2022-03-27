@@ -1,68 +1,52 @@
 import argparse
 
-from scipy.special import softmax
 import numpy as np
 
-from random import choices
+random = np.random.default_rng()
 
-class CollisionCounter:
+def softmax(v):
+    v -= v.min()
+    return np.exp(v)/np.exp(v).sum()
 
-    def __init__(self, num_people, gamma=1/np.e):
-        self.num_people = num_people
-        self.collission_counter = np.zeros(num_people)
-        self.log_gamma = np.log(gamma)
+class Participant:
 
-    def increment_hits(self, j):
-        self.collission_counter[j] += 1
+    def __init__(self, num_people):
+        self.meetings_counter = np.zeros(num_people)
+
+    def increment_meetings_count(self, *other_participants):
+        for other in other_participants:
+            self.meetings_counter[other] += 1
     
-    def sample_match(self, feasible):
-        feas = self._log_gamma*self._collission_counter[feasible]
-        probabilities = softmax(feas)
-        match = choices(feasible, probabilities, k=1).pop()
+    def sample_match(self, indices, gamma):
+        meeting_counts = gamma*self.meetings_counter[indices]
+        probabilities = softmax(meeting_counts)
+        match = random.choice(indices, p=probabilities)
         return match
 
-def generate_pairs(meeting_counts, num_people):
-    feasible = list(range(num_people))
+def generate_pairs(participants, gamma):
+    unmatched = list(range(len(participants)))
     pairs = []
-    while len(feasible) != 0:
-        index = np.random.choice(feasible)
-        feasible.remove(index)
-        cc = meeting_counts[index]
-        match = cc.sample_match(feasible)
-        feasible.remove(match)
-        pairs.append((index, match))
+    while len(unmatched)>1:
+        index = random.choice(unmatched)
+        unmatched.remove(index)
+        participant = participants[index]
+        match = participant.sample_match(unmatched, gamma)
+        unmatched.remove(match)
+        pairs.append([index, match])
+    if len(unmatched) == 1:
+        pairs[0].append(unmatched[0])
     return pairs
 
-def generate_circuit(meeting_counts, num_people):
-    feasible = list(range(num_people))
-    pairs = []
-    start = np.random.choice(feasible)
-    index = start
-    while len(feasible) > 1:
-        feasible.remove(index)
-        cc = meeting_counts[index]
-        match = cc.sample_match(feasible)
-        pairs.append((index, match))
-        index = match
-    pairs.append((index,start))
-    return pairs
-
-# sampling first person based on stuff
-def main(num_people, num_iters, gamma, circuit):
-    meeting_counts = [CollisionCounter(num_people, gamma=gamma) for k in range(num_people)]
-    for i in range(num_iters):
-        if circuit:
-            pairs = generate_circuit(meeting_counts, num_people)
-        else:
-            pairs = generate_pairs(meeting_counts, num_people)
-        for i,j in pairs:
-            meeting_counts[i].increment_hits(j)
-            meeting_counts[j].increment_hits(i)
-    print("average hit/person:",
-            (2 if circuit else 1)*num_iters/(num_people-1))
-    for i,q in enumerate(meeting_counts):
-        cc = q.collision_counter()
-        print("person {}:".format(i), cc)
+def main(num_people, num_iters, gamma):
+    gamma = np.log(gamma)
+    participants = [Participant(num_people) for _ in range(num_people)]
+    for iteration in range(num_iters):
+        pairs = generate_pairs(participants, gamma)
+        for match in pairs:
+            for index in match:
+                participants[index].increment_meetings_count(*filter(lambda i : i != index, match))
+    for participant_no,participant in enumerate(participants):
+        print("participant {}:".format(participant_no), participant.meetings_counter)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='plot example data')
@@ -79,10 +63,5 @@ if __name__ == '__main__':
                         type=int,
                         default=10,
                         help='number of iterations')
-    parser.add_argument('--circuit',
-                        '-c',
-                        default=False,
-                        action='store_true',
-                        help='simulate circuit')
     args = vars(parser.parse_args())
     main(**args)
