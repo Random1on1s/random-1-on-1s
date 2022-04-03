@@ -8,6 +8,7 @@ from random1on1.api.pairings import Pairings
 
 
 class HistoryChannel(ReadWriteChannel):
+
     def __init__(self, channel_name: str):
         super().__init__(channel_name)
         raise NotImplementedError()
@@ -20,18 +21,21 @@ class HistoryChannel(ReadWriteChannel):
 
 
 class LoggingChannel(WriteOnlyChannel):
+
     def __init__(self, channel_name: str):
         super().__init__(channel_name)
         raise NotImplementedError()
 
 
 class AnnouncementChannel(WriteOnlyChannel):
+
     def __init__(self, channel_name: str):
         super().__init__(channel_name)
         raise NotImplementedError()
 
 
 class PairingsDmChannel(WriteOnlyDirectMessages):
+
     def __init__(
         self,
         channel_name: str,

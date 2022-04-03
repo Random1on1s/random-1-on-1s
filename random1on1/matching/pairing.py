@@ -11,6 +11,7 @@ def softmax(v):
 
 
 class Participant:
+
     def __init__(self, num_people):
         self.meetings_counter = np.zeros(num_people)
 
@@ -48,7 +49,7 @@ def main(num_people, num_iters, gamma):
         for match in pairs:
             for index in match:
                 participants[index].increment_meetings_count(
-                    *filter(lambda i: i != index, match)
-                )
+                    *filter(lambda i: i != index, match))
     for participant_no, participant in enumerate(participants):
-        print("participant {}:".format(participant_no), participant.meetings_counter)
+        print("participant {}:".format(participant_no),
+              participant.meetings_counter)

@@ -4,6 +4,7 @@ from random1on1.api.participant import Participant
 
 
 class ReadWriteChannel(ABC, TextChannel):
+
     @abstractmethod
     def __init__(self, channel_name: str):
         # TODO: Add precondition checks here
@@ -11,6 +12,7 @@ class ReadWriteChannel(ABC, TextChannel):
 
 
 class WriteOnlyChannel(ABC, TextChannel):
+
     @abstractmethod
     def __init__(self, channel_name: str):
         # TODO: Add preconditions here
@@ -18,6 +20,7 @@ class WriteOnlyChannel(ABC, TextChannel):
 
 
 class WriteOnlyDirectMessages(ABC, GroupChannel):
+
     @abstractmethod
     def __init__(
         self,

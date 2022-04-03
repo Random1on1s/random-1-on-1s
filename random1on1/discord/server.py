@@ -3,6 +3,7 @@ from random1on1.api.participant import Partitipant
 
 
 class Random1on1Server:
+
     def __init__(self, token: str):
         # TODO: Figure out what you need to uniquely identify a server
         self.token = token

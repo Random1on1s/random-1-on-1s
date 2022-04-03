@@ -2,7 +2,6 @@ from discord import Client
 import logging
 from random1on1.api.config import Random1on1BotConfig
 
-
 logger = logging.getLogger("discord")
 
 
@@ -13,6 +12,7 @@ def read_config(location):
 
 
 class Random1on1Bot(Client):
+
     def __init__(self, *args, **kwargs):
         # TODO: Figure out which items to go in constructor: config, token ?
         super().__init__(*args, **kwargs)

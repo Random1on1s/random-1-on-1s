@@ -25,6 +25,7 @@ class Random1on1BotConfig(object):
         return cls(**json.loads(json_data))
 
     def to_json(self) -> str:
-        return json.dumps(
-            self, default=lambda obj: obj.__dict__, sort_keys=True, indent=4
-        )
+        return json.dumps(self,
+                          default=lambda obj: obj.__dict__,
+                          sort_keys=True,
+                          indent=4)

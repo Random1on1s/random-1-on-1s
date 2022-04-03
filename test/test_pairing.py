@@ -5,6 +5,7 @@ from pairing import Participant
 
 
 class TestPairing(unittest.TestCase):
+
     def test_increment_hits(self):
         """Tests if increment_hits functions correctly.
 
