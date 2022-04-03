@@ -1,5 +1,9 @@
-from abc import ABC, abstractmethod
-from discord.channel import TextChannel, GroupChannel
+from abc import ABC
+from abc import abstractmethod
+
+from discord.channel import GroupChannel
+from discord.channel import TextChannel
+
 from random1on1.api.participant import Participant
 
 

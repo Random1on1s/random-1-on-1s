@@ -1,5 +1,6 @@
-import random1on1
 import numpy as np
+
+import random1on1
 
 # TODO: Refactor this class to implement methods in random1on1.api.algorithm
 random = np.random.default_rng()

@@ -1,10 +1,8 @@
-from random1on1.api.channel import (
-    ReadWriteChannel,
-    WriteOnlyChannel,
-    WriteOnlyDirectMessages,
-)
-from random1on1.api.participant import Participant
+from random1on1.api.channel import ReadWriteChannel
+from random1on1.api.channel import WriteOnlyChannel
+from random1on1.api.channel import WriteOnlyDirectMessages
 from random1on1.api.pairings import Pairings
+from random1on1.api.participant import Participant
 
 
 class HistoryChannel(ReadWriteChannel):

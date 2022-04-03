@@ -1,4 +1,6 @@
-from random1on1.api.channels import AnnouncementChannel, HistoryChannel, LoggingChannel
+from random1on1.api.channels import AnnouncementChannel
+from random1on1.api.channels import HistoryChannel
+from random1on1.api.channels import LoggingChannel
 from random1on1.api.participant import Partitipant
 
 

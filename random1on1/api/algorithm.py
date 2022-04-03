@@ -1,6 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
+
 from networkx import Graph
 from numpy.random import default_rng
+
 from random1on1.api.pairings import Pairings
 
 
