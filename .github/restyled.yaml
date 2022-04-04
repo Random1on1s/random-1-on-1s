@@ -4,3 +4,9 @@ statuses:
   differences: true
   no_differences: true
   error: false
+restylers:
+  - yapf
+  - reorder-python-imports
+  - shellharden
+  - shfmt
+  - prettier-yaml
