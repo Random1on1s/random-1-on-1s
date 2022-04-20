@@ -1,19 +1,15 @@
 import json
-
 from abc import ABC
 from abc import abstractmethod
 from datetime import datetime
+from functools import reduce
 
 from discord import CategoryChannel
 from discord import GroupChannel
 from discord import Role
 from discord import TextChannel
-
-from functools import reduce
-
 from networkx import connected_components
 from networkx import union
-
 from preconditions import preconditions
 
 from .pairings import Pairings

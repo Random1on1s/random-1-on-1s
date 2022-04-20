@@ -1,17 +1,15 @@
 import logging
-
 from datetime import datetime
 
-from discord import Client
 from discord import CategoryChannel
-
+from discord import Client
 from networkx import connected_components
 
-from random1on1.api.config import Random1on1BotConfig
-from random1on1.api.participant import Participant
 from random1on1.api.channels import AnnouncementChannel
 from random1on1.api.channels import HistoryChannel
 from random1on1.api.channels import LoggingChannel
+from random1on1.api.config import Random1on1BotConfig
+from random1on1.api.participant import Participant
 from random1on1.matching.uniform import UniformMatchingAlgorithm
 
 logger = logging.getLogger("discord")
