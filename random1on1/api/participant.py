@@ -1,4 +1,4 @@
-from discord.member import Member
+from discord import Member
 
 
 class Participant(Member):

@@ -19,7 +19,8 @@ class MatchingAlgorithm(ABC):
     @abstractmethod
     def __init__(
         self,
-        participants_graph: Graph,
+        participants: list[Participant],
+        previous_pairings: Pairings,
         seed=None,
     ):
         # TODO: Add preconditions on participant graph
