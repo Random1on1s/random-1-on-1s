@@ -9,10 +9,10 @@ from discord import GroupChannel
 from discord import Role
 from discord import TextChannel
 
-from functools import reduce 
+from functools import reduce
 
 from networkx import connected_components
-from networkx import union 
+from networkx import union
 
 from preconditions import preconditions
 
@@ -36,10 +36,10 @@ class Random1on1Channel(ABC):
             )
 
         if not isinstance(channel, TextChannel):
-            raise RuntimeError(f"Channel {self.name} was found, but it is not a TextChannel")
+            raise RuntimeError(
+                f"Channel {self.name} was found, but it is not a TextChannel")
 
         self.channel = channel
-
 
     @abstractmethod
     async def set_permissions(self, default_role: Role, random1on1_role: Role):
@@ -70,16 +70,21 @@ class AnnouncementChannel(Random1on1Channel):
             """)
 
     async def set_permissions(self, default_role: Role, random1on1_role: Role):
-        _ = self.channel.set_permissions(default_role, read_messages=True, write_messages=False)
-        _ = self.channel.set_permissions(random1on1_role, read_messages=True, write_messages=True) 
+        _ = self.channel.set_permissions(default_role,
+                                         read_messages=True,
+                                         write_messages=False)
+        _ = self.channel.set_permissions(random1on1_role,
+                                         read_messages=True,
+                                         write_messages=True)
 
-    async def announce_pairings(self, pairings: Pairings): 
-        announcement_message=f"""
+    async def announce_pairings(self, pairings: Pairings):
+        announcement_message = f"""
         Announcing the pairings for Random 1 on 1s week of {datetime.now().strftime('%Y-%m-%d')}:
         ---
         """
         for component in connected_components(pairings.pairing_graph):
-            announcement_message += "/".join([participant.name for participant in component]) + "\n"
+            announcement_message += "/".join(
+                [participant.name for participant in component]) + "\n"
         _ = self.channel.send(announcement_message)
 
 
@@ -93,7 +98,7 @@ class HistoryChannel(Random1on1Channel):
         _ = self.channel.set_permissions(random1on1_role, read_messages=False)
 
     async def write_pairings(self, pairings: Pairings, dry_run: bool):
-        pairings_message = { "dry_run": dry_run, "pairings": pairings.to_json() }
+        pairings_message = {"dry_run": dry_run, "pairings": pairings.to_json()}
         _ = self.channel.send(json.dumps(pairings_message))
 
     async def read_historical_pairings(
@@ -103,19 +108,21 @@ class HistoryChannel(Random1on1Channel):
     ) -> Pairings:
 
         all_pairings = []
-        for message in await self.channel.history(after=date_from, before=date_to).flatten():
+        for message in await self.channel.history(after=date_from,
+                                                  before=date_to).flatten():
             serialized_message = json.load(message.content)
             if "dry_run" in serialized_message.keys():
                 if not serialized_message["dry_run"]:
-                    pairings = Pairings.from_json(serialized_message["pairings"])
+                    pairings = Pairings.from_json(
+                        serialized_message["pairings"])
                     all_pairings.append(pairings)
 
-        merged_pairing_graph = reduce(
-            lambda G, H: union(G, H), 
-            [ p.pairing_graph for p in all_pairings ]
-        )
+        merged_pairing_graph = reduce(lambda G, H: union(G, H),
+                                      [p.pairing_graph for p in all_pairings])
 
-        merged_pairings = Pairings(pairing_graph=merged_pairing_graph, date_of_pairing=datetime.now(), dry_run=False)
+        merged_pairings = Pairings(pairing_graph=merged_pairing_graph,
+                                   date_of_pairing=datetime.now(),
+                                   dry_run=False)
         return merged_pairings
 
 
@@ -126,5 +133,4 @@ class LoggingChannel(Random1on1Channel):
 
     async def set_permissions(self, default_role: Role, random1on1_role: Role):
         _ = self.channel.set_permissions(default_role, read_messages=False)
-        _ = self.channel.set_permissions(random1on1_role, read_messages=False) 
-
+        _ = self.channel.set_permissions(random1on1_role, read_messages=False)

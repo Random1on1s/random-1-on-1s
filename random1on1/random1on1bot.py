@@ -96,18 +96,27 @@ class Random1on1Bot(Client):
         return random1on1_role
 
     def get_announcement_channel(self) -> AnnouncementChannel:
-        announcement_channel = AnnouncementChannel(name=self.config.announcement_channel_name, category=self.category)
-        _ = announcement_channel.set_permissions(default_role=self.default_role, random1on1_role=self.random1on1_role)
+        announcement_channel = AnnouncementChannel(
+            name=self.config.announcement_channel_name, category=self.category)
+        _ = announcement_channel.set_permissions(
+            default_role=self.default_role,
+            random1on1_role=self.random1on1_role)
         return announcement_channel
 
     def get_history_channel(self) -> HistoryChannel:
-        history_channel = HistoryChannel(name=self.config.history_channel_name, category=self.category)
-        _ = history_channel.set_permissions(default_role=self.default_role, random1on1_role=self.random1on1_role)
+        history_channel = HistoryChannel(name=self.config.history_channel_name,
+                                         category=self.category)
+        _ = history_channel.set_permissions(
+            default_role=self.default_role,
+            random1on1_role=self.random1on1_role)
         return history_channel
 
     def get_logging_channel(self) -> LoggingChannel:
-        logging_channel = LoggingChannel(name=self.config.logging_channel_name, category=self.category)
-        _ = logging_channel.set_permissions(default_role=self.default_role, random1on1_role=self.random1on1_role)
+        logging_channel = LoggingChannel(name=self.config.logging_channel_name,
+                                         category=self.category)
+        _ = logging_channel.set_permissions(
+            default_role=self.default_role,
+            random1on1_role=self.random1on1_role)
         return logging_channel
 
     def get_participants(self) -> list[Participant]:
@@ -132,17 +141,23 @@ class Random1on1Bot(Client):
         #               // other config stuff goes here.
         #           }
         #       ```
-        matching_algorithm = UniformMatchingAlgorithm(participants=participants, previous_pairings=previous_pairings)
+        matching_algorithm = UniformMatchingAlgorithm(
+            participants=participants, previous_pairings=previous_pairings)
         pairings = matching_algorithm.generate_pairs(dry_run=dry_run)
         _ = self.history_channel.write_pairings(pairings, dry_run=dry_run)
 
         if not dry_run:
             _ = self.announcement_channel.announce_pairings(pairings)
             pairing_channel_name = f'Random 1 on 1 pairings for {datetime.now().strftime("%Y-%m-%d")}'
-            # TODO: Consider making introductions multithreaded to reduce runtime 
+            # TODO: Consider making introductions multithreaded to reduce runtime
             for match_component in connected_components(pairings):
                 bot_user = self.user
                 if not bot_user:
-                    raise RuntimeError("Unable to communicate with bot user required for creating pairing groups") 
-                dm_channel = bot_user.create_group(*[participant.member for participant in match_component])
-                _ = dm_channel.send("Hey everyone! You have been paired up this week for Random 1 on 1s! Happy chatting!") 
+                    raise RuntimeError(
+                        "Unable to communicate with bot user required for creating pairing groups"
+                    )
+                dm_channel = bot_user.create_group(
+                    *[participant.member for participant in match_component])
+                _ = dm_channel.send(
+                    "Hey everyone! You have been paired up this week for Random 1 on 1s! Happy chatting!"
+                )
