@@ -1,11 +1,9 @@
-import pytest
-
 import discord  # This import is needed in order for pytest mocking to work, please don't remove
-
+import pytest
 from preconditions import PreconditionError
 
-from random1on1.random1on1bot import Random1on1Bot
 from random1on1.api.config import Random1on1BotConfig
+from random1on1.random1on1bot import Random1on1Bot
 
 TEST_TOKEN = "test_token"
 TEST_GUILD_ID = "test_guild_id"
