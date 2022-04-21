@@ -2,11 +2,11 @@ import json
 
 from preconditions import preconditions
 
-DEFAULT_ROLE = "Random-1-on-1s"
+DEFAULT_ANNOUNCEMENT_CHANNEL = "random-1-on-1-announcements"
 DEFAULT_CATEGORY = "Random-1-on-1s"
 DEFAULT_HISTORY_CHANNEL = "pairing-history"
 DEFAULT_LOGGING_CHANNEL = "logs"
-DEFAULT_ANNOUNCEMENT_CHANNEL = "random-1-on-1-announcements"
+DEFAULT_ROLE = "Random-1-on-1s"
 
 
 class Random1on1BotConfig(object):
@@ -18,15 +18,16 @@ class Random1on1BotConfig(object):
         lambda history_channel: len(history_channel) > 0,
         lambda logging_channel: len(logging_channel) > 0,
         lambda announcement_channel: len(announcement_channel) > 0,
+        lambda dm_matches, announce_matches: dm_matches or announce_matches
     )
     def __init__(
         self,
         guild_id: str,
         random1on1_role: str = DEFAULT_ROLE,
         channel_category: str = DEFAULT_CATEGORY,
+        announcement_channel: str = DEFAULT_ANNOUNCEMENT_CHANNEL,
         history_channel: str = DEFAULT_HISTORY_CHANNEL,
         logging_channel: str = DEFAULT_LOGGING_CHANNEL,
-        announcement_channel: str = DEFAULT_ANNOUNCEMENT_CHANNEL,
         dm_matches: bool = True,
         announce_matches: bool = True,
     ):
