@@ -20,7 +20,6 @@ from .pairings import Pairings
 class AbstractRandom1on1Channel(ABC):
 
     @preconditions(lambda name: len(name) > 0)
-    @abstractmethod
     async def __init__(self, name: str, category: CategoryChannel):
         self.name = name
         channels = [c for c in category.text_channels if c.name == self.name]
