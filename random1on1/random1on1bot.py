@@ -18,7 +18,6 @@ from random1on1.matching.uniform import UniformMatchingAlgorithm
 
 from threading import Thread
 
-
 logger = logging.getLogger("discord")
 
 
@@ -147,7 +146,8 @@ class Random1on1Bot(Client):
         #               // other config stuff goes here.
         #           }
         #       ```
-        matching_algorithm = UniformMatchingAlgorithm(participants=participants, previous_pairings=previous_pairings)
+        matching_algorithm = UniformMatchingAlgorithm(
+            participants=participants, previous_pairings=previous_pairings)
         pairings = matching_algorithm.generate_pairs(dry_run=dry_run)
         _ = self.history_channel.write_pairings(pairings, dry_run=dry_run)
 
@@ -156,19 +156,22 @@ class Random1on1Bot(Client):
             if self.config.announce_matches:
                 _ = self.announcement_channel.announce_pairings(pairings)
 
-            if self.config.dm_matches: 
+            if self.config.dm_matches:
                 bot_user = self.user
                 if not bot_user:
-                    raise RuntimeError("Unable to communicate with bot user required for creating pairing groups") 
+                    raise RuntimeError(
+                        "Unable to communicate with bot user required for creating pairing groups"
+                    )
 
                 pairing_channel_name = f'Random 1 on 1 pairings for {datetime.now().strftime("%Y-%m-%d")}'
-                
+
                 def send_intro_dm(pairing_group):
-                    dm_channel = bot_user.create_group(*[participant.member for participant in pairing_group])
-                    _ = dm_channel.send("Hey everyone! You have been paired up this week for Random 1 on 1s! Happy chatting!") 
+                    dm_channel = bot_user.create_group(
+                        *[participant.member for participant in pairing_group])
+                    _ = dm_channel.send(
+                        "Hey everyone! You have been paired up this week for Random 1 on 1s! Happy chatting!"
+                    )
 
-               
                 for pairing_group in connected_components(pairings):
-                    th = Thread(target=send_intro_dm, args=(pairing_group,))
+                    th = Thread(target=send_intro_dm, args=(pairing_group, ))
                     th.start()
-

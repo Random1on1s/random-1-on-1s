@@ -29,7 +29,8 @@ class UniformMatchingAlgorithm(MatchingAlgorithm):
 
         while (len(self.potential_pairings.nodes) > 3
                and len(self.potential_pairings.edges) > 1):
-            person_1, person_2, _ = self.random.choice(list(self.potential_pairings.edge))
+            person_1, person_2, _ = self.random.choice(
+                list(self.potential_pairings.edge))
             pairing_graph.add_edge(person_1, person_2)
             self.potential_pairings.remove_edge(person_1, person_2)
             self.potential_pairings.remove_node(person_1)

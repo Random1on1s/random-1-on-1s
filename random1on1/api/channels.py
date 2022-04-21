@@ -8,7 +8,7 @@ from discord import CategoryChannel
 from discord import Role
 from discord import TextChannel
 
-from functools import reduce 
+from functools import reduce
 
 from networkx import connected_components
 from networkx import union

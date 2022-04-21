@@ -18,8 +18,7 @@ class Random1on1BotConfig(object):
         lambda history_channel: len(history_channel) > 0,
         lambda logging_channel: len(logging_channel) > 0,
         lambda announcement_channel: len(announcement_channel) > 0,
-        lambda dm_matches, announce_matches: dm_matches or announce_matches
-    )
+        lambda dm_matches, announce_matches: dm_matches or announce_matches)
     def __init__(
         self,
         guild_id: str,
