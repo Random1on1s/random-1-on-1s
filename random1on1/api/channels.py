@@ -5,9 +5,11 @@ from datetime import datetime
 from functools import reduce
 
 from discord import CategoryChannel
-from discord import GroupChannel
 from discord import Role
 from discord import TextChannel
+
+from functools import reduce 
+
 from networkx import connected_components
 from networkx import union
 from preconditions import preconditions
@@ -15,25 +17,21 @@ from preconditions import preconditions
 from .pairings import Pairings
 
 
-class Random1on1Channel(ABC):
+class AbstractRandom1on1Channel(ABC):
 
     @preconditions(lambda name: len(name) > 0)
     @abstractmethod
-    def __init__(self, name: str, category: CategoryChannel):
+    async def __init__(self, name: str, category: CategoryChannel):
         self.name = name
         channels = [c for c in category.text_channels if c.name == self.name]
         if len(channels) == 0:
-            channel = category.create_text_channel(name=self.name)
+            channel = await category.create_text_channel(name=self.name)
         elif len(channels) == 1:
             channel = channels[0]
         else:
             raise RuntimeError(
                 f"Found multiple channels in category {category.name} with reserved channel name {self.name}"
             )
-
-        if not isinstance(channel, TextChannel):
-            raise RuntimeError(
-                f"Channel {self.name} was found, but it is not a TextChannel")
 
         self.channel = channel
 
@@ -42,7 +40,7 @@ class Random1on1Channel(ABC):
         yield
 
 
-class AnnouncementChannel(Random1on1Channel):
+class AnnouncementChannel(AbstractRandom1on1Channel):
 
     def __init__(self, name: str, category: CategoryChannel):
         super().__init__(name, category)
@@ -84,10 +82,7 @@ class AnnouncementChannel(Random1on1Channel):
         _ = self.channel.send(announcement_message)
 
 
-class HistoryChannel(Random1on1Channel):
-
-    def __init__(self, name: str, category: CategoryChannel):
-        super().__init__(name, category)
+class HistoryChannel(AbstractRandom1on1Channel):
 
     async def set_permissions(self, default_role: Role, random1on1_role: Role):
         _ = self.channel.set_permissions(default_role, read_messages=False)
@@ -98,9 +93,9 @@ class HistoryChannel(Random1on1Channel):
         _ = self.channel.send(json.dumps(pairings_message))
 
     async def read_historical_pairings(
-            self,
-            date_to: datetime = datetime(year=1970, month=1, day=1),
-            date_from: datetime = datetime.now(),
+        self,
+        date_to: datetime = datetime.now(),
+        date_from: datetime = datetime(year=1970, month=1, day=1),
     ) -> Pairings:
 
         all_pairings = []
@@ -122,10 +117,7 @@ class HistoryChannel(Random1on1Channel):
         return merged_pairings
 
 
-class LoggingChannel(Random1on1Channel):
-
-    def __init__(self, name: str, category: CategoryChannel):
-        super().__init__(name, category)
+class LoggingChannel(AbstractRandom1on1Channel):
 
     async def set_permissions(self, default_role: Role, random1on1_role: Role):
         _ = self.channel.set_permissions(default_role, read_messages=False)
