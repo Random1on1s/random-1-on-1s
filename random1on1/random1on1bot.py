@@ -5,12 +5,19 @@ from discord import CategoryChannel
 from discord import Client
 from networkx import connected_components
 
+from preconditions import preconditions
+
+from random1on1.api.config import Random1on1BotConfig
+from random1on1.api.participant import Participant
 from random1on1.api.channels import AnnouncementChannel
 from random1on1.api.channels import HistoryChannel
 from random1on1.api.channels import LoggingChannel
 from random1on1.api.config import Random1on1BotConfig
 from random1on1.api.participant import Participant
 from random1on1.matching.uniform import UniformMatchingAlgorithm
+
+from threading import Thread
+
 
 logger = logging.getLogger("discord")
 
@@ -23,6 +30,7 @@ def read_config(location):
 
 class Random1on1Bot(Client):
 
+    @preconditions(lambda token: len(token) > 0)
     def __init__(self, token: str, config: Random1on1BotConfig):
         super().__init__()
         self.token = token
@@ -139,23 +147,28 @@ class Random1on1Bot(Client):
         #               // other config stuff goes here.
         #           }
         #       ```
-        matching_algorithm = UniformMatchingAlgorithm(
-            participants=participants, previous_pairings=previous_pairings)
+        matching_algorithm = UniformMatchingAlgorithm(participants=participants, previous_pairings=previous_pairings)
         pairings = matching_algorithm.generate_pairs(dry_run=dry_run)
         _ = self.history_channel.write_pairings(pairings, dry_run=dry_run)
 
         if not dry_run:
-            _ = self.announcement_channel.announce_pairings(pairings)
-            pairing_channel_name = f'Random 1 on 1 pairings for {datetime.now().strftime("%Y-%m-%d")}'
-            # TODO: Consider making introductions multithreaded to reduce runtime
-            for match_component in connected_components(pairings):
+
+            if self.config.announce_matches:
+                _ = self.announcement_channel.announce_pairings(pairings)
+
+            if self.config.dm_matches: 
                 bot_user = self.user
                 if not bot_user:
-                    raise RuntimeError(
-                        "Unable to communicate with bot user required for creating pairing groups"
-                    )
-                dm_channel = bot_user.create_group(
-                    *[participant.member for participant in match_component])
-                _ = dm_channel.send(
-                    "Hey everyone! You have been paired up this week for Random 1 on 1s! Happy chatting!"
-                )
+                    raise RuntimeError("Unable to communicate with bot user required for creating pairing groups") 
+
+                pairing_channel_name = f'Random 1 on 1 pairings for {datetime.now().strftime("%Y-%m-%d")}'
+                
+                def send_intro_dm(pairing_group):
+                    dm_channel = bot_user.create_group(*[participant.member for participant in pairing_group])
+                    _ = dm_channel.send("Hey everyone! You have been paired up this week for Random 1 on 1s! Happy chatting!") 
+
+               
+                for pairing_group in connected_components(pairings):
+                    th = Thread(target=send_intro_dm, args=(pairing_group,))
+                    th.start()
+
