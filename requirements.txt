@@ -19,6 +19,7 @@ preconditions==0.1
 py==1.11.0
 pyparsing==3.0.8
 pytest==7.1.1
+pytest-mock==3.7.0
 tomli==2.0.1
 typing_extensions==4.1.1
 yapf==0.32.0
