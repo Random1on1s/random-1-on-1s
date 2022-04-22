@@ -4,14 +4,13 @@ from typing import List
 from logging import Handler, NOTSET, LogRecord
 from discord import Client, TextChannel
 
+
 class DiscordClientHandler(Handler):
 
-    def __init__(
-            self,
-            discord_client: Client,
-            channels: List[int],
-            level=NOTSET
-        ):
+    def __init__(self,
+                 discord_client: Client,
+                 channels: List[int],
+                 level=NOTSET):
         super().__init__(level)
         self.discord_client = discord_client
         self.channels = channels
@@ -27,8 +26,7 @@ class DiscordClientHandler(Handler):
         tasks = []
         for channel_id in self.channels:
             tasks.append(
-                    asyncio.create_task(self.async_send_message(channel_id, msg))
-            )
+                asyncio.create_task(self.async_send_message(channel_id, msg)))
         for task in tasks:
             await task
 
