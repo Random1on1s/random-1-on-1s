@@ -33,7 +33,7 @@ class TestDiscordHandler(unittest.TestCase):
         handler = DiscordClientHandler(mock_client, channels)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
-        logger.info('hello')
+        logger.info(msg)
 
         # perform tests
         for channel_id in channels:
