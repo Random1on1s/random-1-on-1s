@@ -1,8 +1,10 @@
 import logging
-
 import unittest
-from unittest.mock import Mock, AsyncMock
-from discord import Client, TextChannel
+from unittest.mock import AsyncMock
+from unittest.mock import Mock
+
+from discord import Client
+from discord import TextChannel
 
 from random1on1.api.discord_handler import DiscordClientHandler
 

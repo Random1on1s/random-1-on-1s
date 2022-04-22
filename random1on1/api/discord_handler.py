@@ -1,8 +1,11 @@
 import asyncio
-
+from logging import Handler
+from logging import LogRecord
+from logging import NOTSET
 from typing import List
-from logging import Handler, NOTSET, LogRecord
-from discord import Client, TextChannel
+
+from discord import Client
+from discord import TextChannel
 
 
 class DiscordClientHandler(Handler):
