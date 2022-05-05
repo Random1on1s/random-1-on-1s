@@ -39,7 +39,8 @@ class UniformMatchingAlgorithm(MatchingAlgorithm):
         previous_pairings_merged_graph.add_nodes_from(participants)
         complete_pairings_graph = complete_graph(all_members)
         potential_pairing_graph = difference(
-            complete_pairings_graph, self.previous_pairings_merged.pairing_graph)
+            complete_pairings_graph,
+            self.previous_pairings_merged.pairing_graph)
 
         for member in not_participating:
             potential_pairing_graph.remove_node(member)

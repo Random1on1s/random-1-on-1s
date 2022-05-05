@@ -237,7 +237,8 @@ class Random1on1Bot(Client):
         #       ```
 
         matching_algorithm = UniformMatchingAlgorithm(
-            participants=participants, previous_pairings_merged=previous_pairings_merged)
+            participants=participants,
+            previous_pairings_merged=previous_pairings_merged)
         logger.debug(
             "Constructed instance of random1on1 algorithm. Starting to run matching program."
         )
