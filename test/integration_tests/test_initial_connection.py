@@ -1,6 +1,6 @@
 import asyncio
-import os 
-import pathlib 
+import os
+import pathlib
 import logging
 
 from discord import Client
@@ -8,20 +8,19 @@ from discord import Client
 from random1on1.api.config import config_from_json
 from random1on1.random1on1bot import Random1on1Bot
 
-
-logger = logging.getLogger(__name__) # Note this logger does not need to log standard discord events
-file_handler = logging.FileHandler(filename="test_initial_connection.log") 
+logger = logging.getLogger(
+    __name__)  # Note this logger does not need to log standard discord events
+file_handler = logging.FileHandler(filename="test_initial_connection.log")
 file_handler.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 
-
-# IMPORTANT: To run integration tests effectively, we need to create two clients and therefore need two separate tokens (for security reasons). 
+# IMPORTANT: To run integration tests effectively, we need to create two clients and therefore need two separate tokens (for security reasons).
 #            Here the `BOT_TOKEN` is used by the `Random1on1Bot` class to run the random1on1bot program. It needs all the same permissions as the bot.
-#                 the `DISCORD_TOKEN` is used by the discord.Client created for verifying the existance of proper channels. 
-BOT_TOKEN=os.environ["BOT_TOKEN"]
-CLIENT_TOKEN=os.environ["DISCORD_TOKEN"]
+#                 the `DISCORD_TOKEN` is used by the discord.Client created for verifying the existance of proper channels.
+BOT_TOKEN = os.environ["BOT_TOKEN"]
+CLIENT_TOKEN = os.environ["DISCORD_TOKEN"]
 
-TEST_CONFIG=os.environ["TEST_CONFIG"]
+TEST_CONFIG = os.environ["TEST_CONFIG"]
 
 WORKING_DIR = pathlib.Path(__file__).parent
 with open(WORKING_DIR / TEST_CONFIG, "r") as config_file:
@@ -42,4 +41,3 @@ def test_initial_connection():
     # TODO: Add tests here
 
     client.run(CLIENT_TOKEN)
-    
