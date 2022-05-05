@@ -1,7 +1,7 @@
 import asyncio
+import logging
 import os
 import pathlib
-import logging
 
 from discord import Client
 
