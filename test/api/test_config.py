@@ -1,7 +1,7 @@
 import pytest
 
-from random1on1.api.config import Random1on1BotConfig
 from random1on1.api.config import config_from_json
+from random1on1.api.config import Random1on1BotConfig
 
 EMPTY_CONFIG_STR = '{}'
 TEST_CONFIG_STR = '{ "guild_id": 1, "dm_matches": false, "announce_matches": true, "history_channel": "hist"}'
