@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+from argparse import ArgumentParser
+
+from random1on1.random1on1bot import Random1on1Bot
+from random1on1.random1on1bot import read_config
+
+parser = ArgumentParser(description='plot example data')
+
+parser.add_argument('token', type=str, help='Discord authentication token')
+parser.add_argument('config-path',
+                    type=str,
+                    help='Config location for Random 1-on-1 Bot')
+parser.add_argument(
+    'dry-run',
+    type=bool,
+    action='store_true',
+    help=
+    'Run algorithm and log output as a dry-run, but do not send out pairings')
+
+args = vars(parser.parse_args())
+
+token = args['token']
+config = read_config(location=args['config'])
+
+if "dry_run" in args:
+    bot = Random1on1Bot(config=config, dry_run=args["dry_run"])
+else:
+    bot = Random1on1Bot(config=config)
+
+bot.run(token)

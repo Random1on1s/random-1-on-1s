@@ -1,7 +1,8 @@
 from abc import ABC
 from abc import abstractmethod
+from typing import List
 
-from networkx import Graph
+from discord import Member
 from numpy.random import default_rng
 
 from random1on1.api.pairings import Pairings
@@ -19,7 +20,8 @@ class MatchingAlgorithm(ABC):
     @abstractmethod
     def __init__(
         self,
-        participants_graph: Graph,
+        participants: List[Member],
+        previous_pairings_merged: Pairings,
         seed=None,
     ):
         # TODO: Add preconditions on participant graph

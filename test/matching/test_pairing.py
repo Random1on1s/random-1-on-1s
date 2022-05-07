@@ -1,7 +1,7 @@
 import unittest
 
-from pairing import generate_pairs
-from pairing import Participant
+from random1on1.matching.pairing import generate_pairs
+from random1on1.matching.pairing import Participant
 
 
 class TestPairing(unittest.TestCase):
