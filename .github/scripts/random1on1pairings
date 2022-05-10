@@ -27,7 +27,9 @@ intents = Intents.default()
 intents.members = True
 
 if "dry_run" in args:
-    bot = Random1on1Bot(config=config, dry_run=args["dry_run"], intents=intents)
+    bot = Random1on1Bot(config=config,
+                        dry_run=args["dry_run"],
+                        intents=intents)
 else:
     bot = Random1on1Bot(config=config, intents=intents)
 
