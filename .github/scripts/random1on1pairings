@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from argparse import ArgumentParser
 
+from discord import Intents
+
 from random1on1.random1on1bot import Random1on1Bot
 from random1on1.random1on1bot import read_config
 
@@ -21,10 +23,14 @@ args = vars(parser.parse_args())
 
 token = args['token']
 config = read_config(location=args['config'])
+intents = Intents.default()
+intents.members = True
 
 if "dry_run" in args:
-    bot = Random1on1Bot(config=config, dry_run=args["dry_run"])
+    bot = Random1on1Bot(config=config,
+                        dry_run=args["dry_run"],
+                        intents=intents)
 else:
-    bot = Random1on1Bot(config=config)
+    bot = Random1on1Bot(config=config, intents=intents)
 
 bot.run(token)
