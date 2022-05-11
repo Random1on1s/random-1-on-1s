@@ -132,6 +132,8 @@ class AnnouncementChannel(AbstractRandom1on1Channel):
                 "Found zero previous messages in AnnouncementChannel %s. Sending introductory announcement.",
                 self.name)
             _ = await self.channel.send("""
+@everyone 
+
 Hello Fellow Humans!
 
 My name is the Random 1 on 1 bot! I will be running a program where you (if you choose to opt in) will be matched randomly every week with a new person from the discord server. The idea is to promote social interaction by getting everyone to meet new people from the server they might not have talked to before. I will send over an introduction to kick off a conversation, and then you and your partner for the week can take it from there. It's recommended that you spend at least 15 minutes for a chat (either over discord, or video conference or, if applicable, in person), but there's not hard and fast rules. The point of the program is just to have fun!
@@ -169,7 +171,7 @@ Have fun!
         logger.debug(
             "Received for pairings week of %s, constructing announcement message",
             pairings.date_of_pairing.strftime('%Y-%m-%d'))
-        announcement_message = f"""Announcing the pairings for Random 1 on 1s week of {datetime.now().strftime('%Y-%m-%d')}:\n---\n"""
+        announcement_message = f"""@everyone Announcing the pairings for Random 1 on 1s week of {datetime.now().strftime('%Y-%m-%d')}:\n---\n"""
         for component in connected_components(pairings.pairing_graph):
             announcement_message += ("/".join(
                 [f"{participant.mention}"
