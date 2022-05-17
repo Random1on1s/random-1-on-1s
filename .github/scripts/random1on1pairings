@@ -8,13 +8,12 @@ from random1on1.random1on1bot import read_config
 
 parser = ArgumentParser(description='plot example data')
 
-parser.add_argument('token', type=str, help='Discord authentication token')
-parser.add_argument('config-path',
+parser.add_argument('--token', type=str, help='Discord authentication token')
+parser.add_argument('--config_path',
                     type=str,
                     help='Config location for Random 1-on-1 Bot')
 parser.add_argument(
-    'dry-run',
-    type=bool,
+    '--dry_run',
     action='store_true',
     help=
     'Run algorithm and log output as a dry-run, but do not send out pairings')
@@ -22,7 +21,7 @@ parser.add_argument(
 args = vars(parser.parse_args())
 
 token = args['token']
-config = read_config(location=args['config'])
+config = read_config(location=args['config_path'])
 intents = Intents.default()
 intents.members = True
 
