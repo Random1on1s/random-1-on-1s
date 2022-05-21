@@ -1,1 +1,25 @@
-# TODO: Add in configuration for running the various scripts on regular schedule
+name: Automatically run pairings for TUM Mathematics Discord Server
+on: 
+  schedule: 
+    - cron: '0 0 10 ? * TUE *'
+env: 
+  DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+jobs: 
+  run: 
+    name: Automatically run pairings for TUM Mathematics Discord Server
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@main
+      - name: Install Random1on1 Package Dependencies 
+        run: pip install -r requirements.txt
+      - name: Build latest version of random1on1bot 
+        run: python setup.py build 
+      - name: Install latest version of random1on1bot
+        run: python setup.py install 
+      - name: Run random1on1bot pairing algorithm for TUM Mathematics Discord
+        run: |
+          python .github/scripts/random1on1pairings \
+            --token $DISCORD_BOT_TOKEN \
+            --config_path .github/configs/random1on1-mathserver-config.json \
+            --dry_run
