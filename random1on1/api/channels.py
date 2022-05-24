@@ -29,9 +29,9 @@ from discord import AllowedMentions
 from discord import CategoryChannel
 from discord import Role
 from discord import TextChannel
+from networkx import compose
 from networkx import connected_components
 from networkx import Graph
-from networkx import compose
 
 from .pairings import Pairings
 from .pairings import pairings_from_json
