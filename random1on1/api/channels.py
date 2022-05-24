@@ -31,7 +31,7 @@ from discord import Role
 from discord import TextChannel
 from networkx import connected_components
 from networkx import Graph
-from networkx import union
+from networkx import compose
 
 from .pairings import Pairings
 from .pairings import pairings_from_json
@@ -284,7 +284,7 @@ class HistoryChannel(AbstractRandom1on1Channel):
         logger.debug("Unioning the pairing graphs together now")
         # TODO: Change this to a manual union method to add metadata for edges (e.g. the number of and dates of the meetings between two members).
         merged_pairing_graph = reduce(
-            lambda G, H: union(G, H),
+            lambda G, H: compose(G, H),
             [p.pairing_graph for p in all_official_pairings])
 
         merged_pairings = Pairings(
