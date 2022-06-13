@@ -21,5 +21,4 @@ jobs:
         run: |
           python .github/scripts/random1on1pairings \
             --token $DISCORD_BOT_TOKEN \
-            --config_path .github/configs/random1on1-mathserver-config.json \
-            --dry_run
+            --config_path .github/configs/random1on1-mathserver-config.json
