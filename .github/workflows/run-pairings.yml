@@ -2,6 +2,7 @@ name: Automatically run pairings for TUM Mathematics Discord Server
 on: 
   schedule: 
     - cron: '0 0 10 * * TUE'
+
 env: 
   DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 jobs: 
