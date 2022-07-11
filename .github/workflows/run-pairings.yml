@@ -14,10 +14,8 @@ jobs:
     - uses: actions/setup-python@main
     - name: Install Random1on1 Package Dependencies 
       run: pip install -r requirements.txt
-    - name: Build latest version of random1on1bot 
-      run: python setup.py build 
-    - name: Install latest version of random1on1bot
-      run: python setup.py install 
+    - name: Build and install latest version of random1on1bot 
+      run: pip install .
     - name: Run random1on1bot pairing algorithm for TUM Mathematics Discord
       run: |
         python .github/scripts/random1on1pairings \
